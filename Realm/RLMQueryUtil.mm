@@ -179,6 +179,7 @@ public:
 
     RLMProperty *property() const { return m_property; }
     size_t index() const { return m_index; }
+    bool is_array() const { return property().array || property().type == RLMPropertyTypeLinkingObjects; }
     RLMPropertyType type() const { return property().type; }
     Group& group() const { return *m_group; }
 
@@ -299,7 +300,7 @@ public:
         , m_link_column(std::move(link_column))
         , m_column(std::move(column))
     {
-        RLMPrecondition(m_link_column.type() == RLMPropertyTypeArray || m_link_column.type() == RLMPropertyTypeLinkingObjects,
+        RLMPrecondition(m_link_column.is_array(),
                         @"Invalid predicate", @"Collection operation can only be applied to a property of type RLMArray.");
 
         switch (m_type) {
@@ -809,7 +810,6 @@ void QueryBuilder::do_add_constraint(RLMPropertyType type, NSPredicateOperatorTy
             add_binary_constraint(operatorType, values...);
             break;
         case RLMPropertyTypeObject:
-        case RLMPropertyTypeArray:
         case RLMPropertyTypeLinkingObjects:
             add_link_constraint(operatorType, values...);
             break;
@@ -873,12 +873,13 @@ KeyPath key_path_from_string(RLMSchema *schema, RLMObjectSchema *objectSchema, N
         RLMPrecondition(property, @"Invalid property name",
                         @"Property '%@' not found in object of type '%@'", propertyName, objectSchema.className);
 
-        if (property.type == RLMPropertyTypeArray || property.type == RLMPropertyTypeLinkingObjects)
+        if (property.array)
             keyPathContainsToManyRelationship = true;
 
         if (end != NSNotFound) {
-            RLMPrecondition(property.type == RLMPropertyTypeObject || property.type == RLMPropertyTypeArray || property.type == RLMPropertyTypeLinkingObjects,
-                            @"Invalid value", @"Property '%@' is not a link in object of type '%@'", propertyName, objectSchema.className);
+            RLMPrecondition(property.type == RLMPropertyTypeObject || property.type == RLMPropertyTypeLinkingObjects,
+                            @"Invalid value", @"Property '%@' is not a link in object of type '%@'",
+                            propertyName, objectSchema.className);
 
             links.push_back(property);
             REALM_ASSERT(property.objectClassName);
@@ -912,7 +913,7 @@ void validate_property_value(const ColumnReference& column,
                              __unsafe_unretained RLMObjectSchema *const objectSchema,
                              __unsafe_unretained NSString *const keyPath) {
     RLMProperty *prop = column.property();
-    if (prop.type == RLMPropertyTypeArray) {
+    if (prop.array) {
         RLMPrecondition([RLMObjectBaseObjectSchema(RLMDynamicCast<RLMObjectBase>(value)).className isEqualToString:prop.objectClassName],
                         @"Invalid value", err, prop.objectClassName, keyPath, objectSchema.className, value);
     }

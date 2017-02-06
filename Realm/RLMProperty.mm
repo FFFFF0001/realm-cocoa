@@ -27,10 +27,6 @@
 #import "RLMSwiftSupport.h"
 #import "RLMUtil.hpp"
 
-BOOL RLMPropertyTypeIsNullable(RLMPropertyType propertyType) {
-    return propertyType != RLMPropertyTypeArray && propertyType != RLMPropertyTypeLinkingObjects;
-}
-
 BOOL RLMPropertyTypeIsComputed(RLMPropertyType propertyType) {
     return propertyType == RLMPropertyTypeLinkingObjects;
 }

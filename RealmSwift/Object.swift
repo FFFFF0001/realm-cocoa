@@ -67,7 +67,7 @@ import Realm.Private
  See our [Cocoa guide](http://realm.io/docs/cocoa) for more details.
  */
 @objc(RealmSwiftObject)
-open class Object: RLMObjectBase, ThreadConfined {
+open class Object: RLMObjectBase, ThreadConfined, RealmManaged {
 
     // MARK: Initializers
 

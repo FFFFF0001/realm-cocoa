@@ -97,6 +97,12 @@ void RLMInitializeSwiftAccessorGenerics(__unsafe_unretained RLMObjectBase *const
 
 static void validateValueForProperty(__unsafe_unretained id const obj,
                                      __unsafe_unretained RLMProperty *const prop) {
+    if (prop.array) {
+        if (obj && obj != NSNull.null && ![obj conformsToProtocol:@protocol(NSFastEnumeration)]) {
+            @throw RLMException(@"Array property value (%@) is not enumerable.", obj);
+        }
+        return;
+    }
     switch (prop.type) {
         case RLMPropertyTypeString:
         case RLMPropertyTypeBool:
@@ -111,14 +117,6 @@ static void validateValueForProperty(__unsafe_unretained id const obj,
             break;
         case RLMPropertyTypeObject:
             break;
-        case RLMPropertyTypeArray: {
-            if (obj != nil && obj != NSNull.null) {
-                if (![obj conformsToProtocol:@protocol(NSFastEnumeration)]) {
-                    @throw RLMException(@"Array property value (%@) is not enumerable.", obj);
-                }
-            }
-            break;
-        }
         case RLMPropertyTypeAny:
         case RLMPropertyTypeLinkingObjects:
             @throw RLMException(@"Invalid value '%@' for property '%@'", obj, prop.name);

@@ -157,7 +157,8 @@ using namespace realm;
     }
 
     for (RLMProperty *prop in schema.properties) {
-        if (prop.optional && !RLMPropertyTypeIsNullable(prop.type)) {
+        if (prop.optional && prop.array && (prop.type == RLMPropertyTypeObject || prop.type == RLMPropertyTypeLinkingObjects)) {
+            // FIXME: message is wrong
             @throw RLMException(@"Only 'string', 'binary', and 'object' properties can be made optional, and property '%@' is of type '%@'.",
                                 prop.name, RLMTypeToString(prop.type));
         }

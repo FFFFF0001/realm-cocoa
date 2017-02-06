@@ -937,7 +937,7 @@
     [self dispatchAsyncAndWait:^{
         RLMRealm *realm = self.realmWithTestPath;
         [realm transactionWithBlock:^{
-            RLMArray *array = (RLMArray *)[[ArrayPropertyObject allObjectsInRealm:realm].firstObject array];
+            RLMArray *array = [[ArrayPropertyObject allObjectsInRealm:realm].firstObject array];
             [array addObject:[[StringObject alloc] init]];
         }];
     }];
@@ -998,7 +998,7 @@
         [self dispatchAsyncAndWait:^{
             RLMRealm *realm = self.realmWithTestPath;
             [realm transactionWithBlock:^{
-                RLMArray *array = (RLMArray *)[[ArrayPropertyObject allObjectsInRealm:realm].firstObject array];
+                RLMArray *array = [[ArrayPropertyObject allObjectsInRealm:realm].firstObject array];
                 [array addObject:[[StringObject alloc] init]];
             }];
         }];

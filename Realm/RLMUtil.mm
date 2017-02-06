@@ -106,6 +106,29 @@ BOOL RLMIsObjectValidForProperty(__unsafe_unretained id const obj,
     if (property.optional && !RLMCoerceToNil(obj)) {
         return YES;
     }
+    if (property.array) {
+        if (RLMArray *array = RLMDynamicCast<RLMArray>(obj)) {
+            return [array.objectClassName isEqualToString:property.objectClassName];
+        }
+        if (RLMListBase *list = RLMDynamicCast<RLMListBase>(obj)) {
+            return [list._rlmArray.objectClassName isEqualToString:property.objectClassName];
+        }
+        if ([obj conformsToProtocol:@protocol(NSFastEnumeration)]) {
+            // FIXME
+            // check each element for compliance
+            for (id el in (id<NSFastEnumeration>)obj) {
+                RLMObjectBase *obj = RLMDynamicCast<RLMObjectBase>(el);
+                if (!obj || ![obj->_objectSchema.className isEqualToString:property.objectClassName]) {
+                    return NO;
+                }
+            }
+            return YES;
+        }
+        if (!obj || obj == NSNull.null) {
+            return YES;
+        }
+        return NO;
+    }
 
     switch (property.type) {
         case RLMPropertyTypeString:
@@ -142,28 +165,6 @@ BOOL RLMIsObjectValidForProperty(__unsafe_unretained id const obj,
             // object class are valid
             RLMObjectBase *objBase = RLMDynamicCast<RLMObjectBase>(obj);
             return objBase && [objBase->_objectSchema.className isEqualToString:property.objectClassName];
-        }
-        case RLMPropertyTypeArray: {
-            if (RLMArray *array = RLMDynamicCast<RLMArray>(obj)) {
-                return [array.objectClassName isEqualToString:property.objectClassName];
-            }
-            if (RLMListBase *list = RLMDynamicCast<RLMListBase>(obj)) {
-                return [list._rlmArray.objectClassName isEqualToString:property.objectClassName];
-            }
-            if ([obj conformsToProtocol:@protocol(NSFastEnumeration)]) {
-                // check each element for compliance
-                for (id el in (id<NSFastEnumeration>)obj) {
-                    RLMObjectBase *obj = RLMDynamicCast<RLMObjectBase>(el);
-                    if (!obj || ![obj->_objectSchema.className isEqualToString:property.objectClassName]) {
-                        return NO;
-                    }
-                }
-                return YES;
-            }
-            if (!obj || obj == NSNull.null) {
-                return YES;
-            }
-            return NO;
         }
     }
     @throw RLMException(@"Invalid RLMPropertyType specified");

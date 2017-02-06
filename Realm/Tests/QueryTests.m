@@ -527,7 +527,7 @@
     AllTypesObject *obj = results[0];
     XCTAssertEqualObjects(obj[column], val, @"Array not sorted as expected - %@ != %@", obj[column], val);
 
-    RLMArray *ar = (RLMArray *)[[[ArrayOfAllTypesObject allObjectsInRealm:realm] firstObject] array];
+    RLMArray *ar = [[[ArrayOfAllTypesObject allObjectsInRealm:realm] firstObject] array];
     results = [ar sortedResultsUsingKeyPath:column ascending:ascending];
     obj = results[0];
     XCTAssertEqualObjects(obj[column], val, @"Array not sorted as expected - %@ != %@", obj[column], val);
@@ -540,7 +540,7 @@
     XCTAssertEqualWithAccuracy(getter(results[0][column]), val, accuracy, @"Array not sorted as expected");
 
     // test LinkView query
-    RLMArray *ar = (RLMArray *)[[[ArrayOfAllTypesObject allObjectsInRealm:realm] firstObject] array];
+    RLMArray *ar = [[[ArrayOfAllTypesObject allObjectsInRealm:realm] firstObject] array];
     results = [ar sortedResultsUsingKeyPath:column ascending:ascending];
     XCTAssertEqualWithAccuracy(getter(results[0][column]), val, accuracy, @"Array not sorted as expected");
 }

@@ -46,6 +46,7 @@ class ListTests: TestCase {
 
         arrayObject = createArray()
         array = arrayObject.array
+        array!.privateFoo()
 
         let realm = realmWithTestPath()
         try! realm.write {

@@ -534,7 +534,6 @@ static RLMAccessorCode accessorCodeForType(char objcTypeCode, RLMPropertyType rl
             switch (rlmType) {  // custom accessor codes for types that map to objc objects
                 case RLMPropertyTypeObject: return RLMAccessorCodeLink;
                 case RLMPropertyTypeString: return RLMAccessorCodeString;
-                case RLMPropertyTypeArray: return RLMAccessorCodeArray;
                 case RLMPropertyTypeDate: return RLMAccessorCodeDate;
                 case RLMPropertyTypeData: return RLMAccessorCodeData;
                 case RLMPropertyTypeAny: return RLMAccessorCodeAny;

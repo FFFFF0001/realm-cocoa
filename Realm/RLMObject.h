@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class RLMPropertyChange;
 @class RLMPropertyDescriptor;
 @class RLMRealm;
-@class RLMResults;
+@class RLMResults<RLMObjectType: NSObject *>;
 
 /**
  `RLMObject` is a base class for model objects representing data stored in Realms.
@@ -318,7 +318,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return    An `RLMResults` containing all objects of this type in the default Realm.
  */
-+ (RLMResults *)allObjects;
++ (RLMResults<__kindof RLMObject *> *)allObjects;
 
 /**
  Returns all objects of this object type matching the given predicate from the default Realm.
@@ -327,10 +327,10 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return    An `RLMResults` containing all objects of this type in the default Realm that match the given predicate.
  */
-+ (RLMResults *)objectsWhere:(NSString *)predicateFormat, ...;
++ (RLMResults<__kindof RLMObject *> *)objectsWhere:(NSString *)predicateFormat, ...;
 
 /// :nodoc:
-+ (RLMResults *)objectsWhere:(NSString *)predicateFormat args:(va_list)args;
++ (RLMResults<__kindof RLMObject *> *)objectsWhere:(NSString *)predicateFormat args:(va_list)args;
 
 
 /**
@@ -340,7 +340,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return    An `RLMResults` containing all objects of this type in the default Realm that match the given predicate.
  */
-+ (RLMResults *)objectsWithPredicate:(nullable NSPredicate *)predicate;
++ (RLMResults<__kindof RLMObject *> *)objectsWithPredicate:(nullable NSPredicate *)predicate;
 
 /**
  Retrieves the single instance of this object type with the given primary key from the default Realm.
@@ -366,7 +366,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return        An `RLMResults` containing all objects of this type in the specified Realm.
  */
-+ (RLMResults *)allObjectsInRealm:(RLMRealm *)realm;
++ (RLMResults<__kindof RLMObject *> *)allObjectsInRealm:(RLMRealm *)realm;
 
 /**
  Returns all objects of this object type matching the given predicate from the specified Realm.
@@ -376,10 +376,10 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return    An `RLMResults` containing all objects of this type in the specified Realm that match the given predicate.
  */
-+ (RLMResults *)objectsInRealm:(RLMRealm *)realm where:(NSString *)predicateFormat, ...;
++ (RLMResults<__kindof RLMObject *> *)objectsInRealm:(RLMRealm *)realm where:(NSString *)predicateFormat, ...;
 
 /// :nodoc:
-+ (RLMResults *)objectsInRealm:(RLMRealm *)realm where:(NSString *)predicateFormat args:(va_list)args;
++ (RLMResults<__kindof RLMObject *> *)objectsInRealm:(RLMRealm *)realm where:(NSString *)predicateFormat args:(va_list)args;
 
 /**
  Returns all objects of this object type matching the given predicate from the specified Realm.
@@ -389,7 +389,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @return    An `RLMResults` containing all objects of this type in the specified Realm that match the given predicate.
  */
-+ (RLMResults *)objectsInRealm:(RLMRealm *)realm withPredicate:(nullable NSPredicate *)predicate;
++ (RLMResults<__kindof RLMObject *> *)objectsInRealm:(RLMRealm *)realm withPredicate:(nullable NSPredicate *)predicate;
 
 /**
  Retrieves the single instance of this object type with the given primary key from the specified Realm.
